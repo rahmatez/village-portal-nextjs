@@ -1,0 +1,296 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum PengaduanStatus {
+  PENDING
+  DIPROSES
+  SELESAI
+  DITOLAK
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(ADMIN)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  berita     Berita[]
+  pengaduan  Pengaduan[] @relation("HandledBy")
+}
+
+model Berita {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  content     String   @db.Text
+  imageUrl    String?
+  isPublished Boolean  @default(false)
+  publishedAt DateTime?
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isPublished])
+}
+
+model ProdukUMKM {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  price       Decimal  @db.Decimal(12, 2)
+  imageUrl    String?
+  ownerName   String?
+  contact     String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+model Pengaduan {
+  id          String          @id @default(cuid())
+  ticketCode  String          @unique
+  name        String
+  email       String?
+  phone       String?
+  subject     String
+  message     String          @db.Text
+  status      PengaduanStatus @default(PENDING)
+  response    String?         @db.Text
+  handledById String?
+  handledBy   User?           @relation("HandledBy", fields: [handledById], references: [id], onDelete: SetNull)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([status])
+  @@index([ticketCode])
+}
+
+model DataStatistik {
+  id              String   @id @default(cuid())
+  jumlahPenduduk  Int      @default(0)
+  jumlahKK        Int      @default(0)
+  jumlahDusun     Int      @default(0)
+  statusIDM       String   @default("Desa Maju")
+  skorIKS         Float    @default(0)
+  skorIKE         Float    @default(0)
+  skorIKL         Float    @default(0)
+  jumlahTokoUMKM  Int      @default(0)
+  ppidResponHari  Int      @default(3)
+  ppidKepuasan    Float    @default(0)
+  ppidEmail       String?
+  visi            String?  @db.Text
+  misi            String[] @default([])
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+}
+
+enum FasilitasTipe {
+  KESEHATAN
+  PENDIDIKAN
+  UMUM
+}
+
+enum DemografiJenis {
+  UMUR
+  JENIS_KELAMIN
+  PENDIDIKAN
+}
+
+model Kependudukan {
+  id                  String   @id @default(cuid())
+  jumlahPendudukTotal Int      @default(0)
+  jumlahLakiLaki      Int      @default(0)
+  jumlahPerempuan     Int      @default(0)
+  persenUsiaProduktif Float    @default(0)
+  persenLansia        Float    @default(0)
+  sumberPendapatan    String[] @default([])
+  asetDesa            String[] @default([])
+  updatedAt           DateTime @updatedAt
+  createdAt           DateTime @default(now())
+}
+
+model DemografiUmur {
+  id         String         @id @default(cuid())
+  jenis      DemografiJenis @default(UMUR)
+  kelompok   String
+  persentase Float
+  jumlah     Int?
+  urutan     Int            @default(0)
+  updatedAt  DateTime       @updatedAt
+  createdAt  DateTime       @default(now())
+
+  @@index([jenis])
+}
+
+model FasilitasDesa {
+  id         String        @id @default(cuid())
+  tipe       FasilitasTipe
+  nama       String
+  jumlah     Int           @default(1)
+  keterangan String?
+  urutan     Int           @default(0)
+  updatedAt  DateTime      @updatedAt
+  createdAt  DateTime      @default(now())
+
+  @@index([tipe])
+}
+
+model MataPencaharian {
+  id          String   @id @default(cuid())
+  namaProfesi String
+  jumlah      Int
+  persentase  Float
+  urutan      Int      @default(0)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+model WilayahDesa {
+  id          String   @id @default(cuid())
+  luasWilayah String
+  jumlahDusun Int      @default(0)
+  totalRw     Int      @default(0)
+  totalRt     Int      @default(0)
+  daftarDusun String[] @default([])
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+model PerangkatDesa {
+  id            String   @id @default(cuid())
+  nama          String
+  jabatan       String
+  fotoUrl       String?
+  orderPriority Int      @default(0)
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+
+  @@index([orderPriority])
+}
+
+model Gallery {
+  id            String   @id @default(cuid())
+  fotoUrl       String
+  format        String   @default("image/jpeg")
+  altText       String?
+  tanggalUnggah DateTime @default(now())
+  width         Int?
+  height        Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tanggalUnggah])
+}
+
+model ApbDesa {
+  id              String             @id @default(cuid())
+  tahun           Int                @unique
+  totalPendapatan Decimal            @db.Decimal(16, 2)
+  totalBelanja    Decimal            @db.Decimal(16, 2)
+  pembiayaan      Decimal            @db.Decimal(16, 2)
+  silpa           Decimal            @db.Decimal(16, 2)
+  pendapatan      DetailPendapatan[]
+  belanja         DetailBelanja[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model DetailPendapatan {
+  id      String  @id @default(cuid())
+  apbId   String
+  apb     ApbDesa @relation(fields: [apbId], references: [id], onDelete: Cascade)
+  namaPos String
+  nominal Decimal @db.Decimal(16, 2)
+
+  @@index([apbId])
+}
+
+model DetailBelanja {
+  id         String  @id @default(cuid())
+  apbId      String
+  apb        ApbDesa @relation(fields: [apbId], references: [id], onDelete: Cascade)
+  namaBidang String
+  nominal    Decimal @db.Decimal(16, 2)
+  persentase Float
+
+  @@index([apbId])
+}
+
+model GeografisSpasial {
+  id                 String              @id @default(cuid())
+  koordinat          String
+  ketinggian         String
+  kodepos            String
+  kodeKemendagri     String
+  batasUtara         String
+  batasTimur         String
+  batasSelatan       String
+  batasBarat         String
+  googleMapsEmbedUrl String?             @db.Text
+  dusun              DetailDusunSpasial[]
+  jarakAkses         JarakAkses[]
+  updatedAt          DateTime            @updatedAt
+  createdAt          DateTime            @default(now())
+}
+
+model DetailDusunSpasial {
+  id             String           @id @default(cuid())
+  geografisId    String
+  geografis      GeografisSpasial @relation(fields: [geografisId], references: [id], onDelete: Cascade)
+  namaDusun      String
+  deskripsiZona  String?          @db.Text
+  koordinatDusun String?
+  titikPenting   String[]         @default([])
+  urutan         Int              @default(0)
+
+  @@index([geografisId])
+}
+
+model JarakAkses {
+  id          String           @id @default(cuid())
+  geografisId String
+  geografis   GeografisSpasial @relation(fields: [geografisId], references: [id], onDelete: Cascade)
+  destinasi   String
+  jarakKm     Float
+  urutan      Int              @default(0)
+
+  @@index([geografisId])
+}
+
+model Post {
+  id           String   @id @default(cuid())
+  judul        String
+  slug         String   @unique
+  konten       String   @db.Text
+  excerpt      String?
+  fotoSampul   String?
+  tanggalRilis DateTime @default(now())
+  waktuBaca    Int      @default(5)
+  status       String   @default("published")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([tanggalRilis])
+}
