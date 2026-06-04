@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Plus, Trash2 } from 'lucide-react';
 import { geografisApi } from '@/lib/api/modul';
@@ -20,6 +20,7 @@ type FormState = {
 };
 
 type DusunFormItem = {
+  key: string;
   namaDusun: string;
   deskripsiZona: string;
   koordinatDusun: string;
@@ -28,6 +29,7 @@ type DusunFormItem = {
 };
 
 type JarakFormItem = {
+  key: string;
   destinasi: string;
   jarakKm: string;
   urutan: string;
@@ -45,6 +47,10 @@ const EMPTY_FORM: FormState = {
   googleMapsEmbedUrl: '',
 };
 
+function newRowKey() {
+  return `new-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
 export function GeografisManager() {
   const qc = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -56,9 +62,13 @@ export function GeografisManager() {
   const [jarakItems, setJarakItems] = useState<JarakFormItem[]>([]);
   const [error, setError] = useState('');
   const { confirmSave } = useConfirmSave();
+  const hydratedIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!data) return;
+    if (hydratedIdRef.current === data.id) return;
+    hydratedIdRef.current = data.id;
+
     setForm({
       koordinat: data.koordinat ?? '',
       ketinggian: data.ketinggian ?? '',
@@ -72,6 +82,7 @@ export function GeografisManager() {
     });
     setDusunItems(
       data.dusun.map((d, i) => ({
+        key: d.id,
         namaDusun: d.namaDusun,
         deskripsiZona: d.deskripsiZona ?? '',
         koordinatDusun: d.koordinatDusun ?? '',
@@ -81,6 +92,7 @@ export function GeografisManager() {
     );
     setJarakItems(
       data.jarakAkses.map((j, i) => ({
+        key: j.id,
         destinasi: j.destinasi,
         jarakKm: String(j.jarakKm),
         urutan: String(i + 1),
@@ -123,6 +135,7 @@ export function GeografisManager() {
     },
     onSuccess: async () => {
       setError('');
+      hydratedIdRef.current = null;
       await qc.invalidateQueries({ queryKey: ['admin-geografis'] });
     },
     onError: (e) => setError(e instanceof Error ? e.message : 'Gagal menyimpan data geografis'),
@@ -171,7 +184,14 @@ export function GeografisManager() {
               onClick={() =>
                 setDusunItems((prev) => [
                   ...prev,
-                  { namaDusun: '', deskripsiZona: '', koordinatDusun: '', titikPentingText: '', urutan: String(prev.length + 1) },
+                  {
+                    key: newRowKey(),
+                    namaDusun: '',
+                    deskripsiZona: '',
+                    koordinatDusun: '',
+                    titikPentingText: '',
+                    urutan: String(prev.length + 1),
+                  },
                 ])
               }
               className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
@@ -182,7 +202,7 @@ export function GeografisManager() {
           </div>
           <div className="space-y-3">
             {dusunItems.map((item, idx) => (
-              <div key={`${idx}-${item.namaDusun}`} className="grid gap-2 rounded-lg border border-slate-200 p-3 md:grid-cols-2">
+              <div key={item.key} className="grid gap-2 rounded-lg border border-slate-200 p-3 md:grid-cols-2">
                 <input className="admin-input" placeholder="Nama Dusun" value={item.namaDusun} onChange={(e) => updateDusun(idx, 'namaDusun', e.target.value)} />
                 <input className="admin-input" placeholder="Urutan" type="number" value={item.urutan} onChange={(e) => updateDusun(idx, 'urutan', e.target.value)} />
                 <input className="admin-input" placeholder="Deskripsi Zona" value={item.deskripsiZona} onChange={(e) => updateDusun(idx, 'deskripsiZona', e.target.value)} />
@@ -207,7 +227,7 @@ export function GeografisManager() {
               onClick={() =>
                 setJarakItems((prev) => [
                   ...prev,
-                  { destinasi: '', jarakKm: '', urutan: String(prev.length + 1) },
+                  { key: newRowKey(), destinasi: '', jarakKm: '', urutan: String(prev.length + 1) },
                 ])
               }
               className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
@@ -218,7 +238,7 @@ export function GeografisManager() {
           </div>
           <div className="space-y-3">
             {jarakItems.map((item, idx) => (
-              <div key={`${idx}-${item.destinasi}`} className="grid gap-2 rounded-lg border border-slate-200 p-3 md:grid-cols-3">
+              <div key={item.key} className="grid gap-2 rounded-lg border border-slate-200 p-3 md:grid-cols-3">
                 <input className="admin-input" placeholder="Destinasi" value={item.destinasi} onChange={(e) => updateJarak(idx, 'destinasi', e.target.value)} />
                 <input className="admin-input" placeholder="Jarak (KM)" type="number" step="0.1" value={item.jarakKm} onChange={(e) => updateJarak(idx, 'jarakKm', e.target.value)} />
                 <div className="flex gap-2">

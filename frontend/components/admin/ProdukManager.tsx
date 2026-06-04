@@ -12,6 +12,7 @@ import { AdminFormActions } from '@/components/admin/ui/AdminFormActions';
 import { AdminLoadingRow } from '@/components/admin/ui/AdminLoadingRow';
 import { AdminErrorAlert } from '@/components/admin/ui/AdminErrorAlert';
 import { useConfirmSave } from '@/components/admin/ui/useConfirmSave';
+import { ImageUploadField } from '@/components/admin/ui/ImageUploadField';
 
 type ProdukForm = {
   name: string;
@@ -182,13 +183,17 @@ export function ProdukManager() {
       </AdminTable>
 
       {showForm && (
-        <AdminModal title={editing ? 'Edit Produk UMKM' : 'Tambah Produk UMKM'}>
+        <AdminModal title={editing ? 'Edit Produk UMKM' : 'Tambah Produk UMKM'} onClose={closeForm}>
           <form onSubmit={onSubmit} className="mt-4 space-y-3">
               <input className="admin-input" placeholder="Nama Produk" value={form.name} onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))} required />
               <textarea className="admin-input min-h-[90px]" placeholder="Deskripsi" value={form.description} onChange={(e) => setForm((s) => ({ ...s, description: e.target.value }))} />
               <div className="grid gap-3 md:grid-cols-2">
                 <input type="number" min={1} className="admin-input" placeholder="Harga" value={form.price} onChange={(e) => setForm((s) => ({ ...s, price: e.target.value }))} required />
-                <input className="admin-input" placeholder="URL Gambar (opsional)" value={form.imageUrl} onChange={(e) => setForm((s) => ({ ...s, imageUrl: e.target.value }))} />
+                <ImageUploadField
+                  label="Gambar produk"
+                  value={form.imageUrl}
+                  onChange={(url) => setForm((s) => ({ ...s, imageUrl: url }))}
+                />
                 <input className="admin-input" placeholder="Nama Pemilik (opsional)" value={form.ownerName} onChange={(e) => setForm((s) => ({ ...s, ownerName: e.target.value }))} />
                 <input className="admin-input" placeholder="Kontak (opsional)" value={form.contact} onChange={(e) => setForm((s) => ({ ...s, contact: e.target.value }))} />
               </div>

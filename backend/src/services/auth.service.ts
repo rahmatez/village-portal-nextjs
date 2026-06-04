@@ -57,4 +57,8 @@ export const authService = {
     }
     return user;
   },
+
+  async listUsers() {
+    return userRepository.findMany();
+  },
 };

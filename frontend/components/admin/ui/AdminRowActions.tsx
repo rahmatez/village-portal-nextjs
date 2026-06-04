@@ -17,12 +17,14 @@ export function AdminRowActions({
   const { confirmDelete } = useConfirmDelete();
 
   return (
-    <div className="flex justify-end gap-2">
+    <div className="flex justify-end gap-1.5">
       {onEdit ? (
         <button
           type="button"
           onClick={onEdit}
-          className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-100"
+          className="admin-icon-btn !border-primary-100 !text-primary-600 hover:!border-primary-200 hover:!bg-primary-50"
+          aria-label="Edit"
+          title="Edit"
         >
           <Pencil className="h-4 w-4" />
         </button>
@@ -35,7 +37,9 @@ export function AdminRowActions({
               await onDelete();
             }
           }}
-          className="rounded-lg border border-red-200 p-2 text-red-600 hover:bg-red-50"
+          className="admin-icon-btn !border-rose-100 !text-rose-600 hover:!border-rose-200 hover:!bg-rose-50"
+          aria-label="Hapus"
+          title="Hapus"
         >
           <Trash2 className="h-4 w-4" />
         </button>

@@ -33,4 +33,9 @@ export const authController = {
     const user = await authService.getProfile(req.user!.userId);
     res.json({ success: true, data: user });
   }),
+
+  listUsers: asyncHandler(async (_req: AuthRequest, res: Response) => {
+    const data = await authService.listUsers();
+    res.json({ success: true, data });
+  }),
 };

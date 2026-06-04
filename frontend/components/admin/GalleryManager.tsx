@@ -12,6 +12,7 @@ import { AdminRowActions } from '@/components/admin/ui/AdminRowActions';
 import { AdminFormActions } from '@/components/admin/ui/AdminFormActions';
 import { AdminErrorAlert } from '@/components/admin/ui/AdminErrorAlert';
 import { useConfirmSave } from '@/components/admin/ui/useConfirmSave';
+import { ImageUploadField } from '@/components/admin/ui/ImageUploadField';
 
 type GalleryForm = {
   fotoUrl: string;
@@ -187,9 +188,13 @@ export function GalleryManager() {
       )}
 
       {showForm && (
-        <AdminModal title={editing ? 'Edit Foto Galeri' : 'Tambah Foto Galeri'} maxWidthClassName="max-w-xl">
+        <AdminModal title={editing ? 'Edit Foto Galeri' : 'Tambah Foto Galeri'} maxWidthClassName="max-w-xl" onClose={closeForm}>
           <form onSubmit={onSubmit} className="mt-4 space-y-3">
-              <input className="admin-input" placeholder="URL Foto" value={form.fotoUrl} onChange={(e) => setForm((s) => ({ ...s, fotoUrl: e.target.value }))} required />
+              <ImageUploadField
+                label="Foto galeri"
+                value={form.fotoUrl}
+                onChange={(url) => setForm((s) => ({ ...s, fotoUrl: url }))}
+              />
               <input className="admin-input" placeholder="Format (image/jpeg)" value={form.format} onChange={(e) => setForm((s) => ({ ...s, format: e.target.value }))} />
               <input className="admin-input" placeholder="Alt text (opsional)" value={form.altText} onChange={(e) => setForm((s) => ({ ...s, altText: e.target.value }))} />
               <div className="grid grid-cols-2 gap-3">

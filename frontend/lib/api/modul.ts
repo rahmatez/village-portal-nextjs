@@ -269,6 +269,15 @@ export const produkApi = {
 };
 
 export const pengaduanApi = {
+  create: (payload: {
+    name: string;
+    email?: string;
+    phone?: string;
+    subject: string;
+    message: string;
+  }) => api.post<ApiResponse<PengaduanItem>>('/pengaduan', payload),
+  getByTicket: (ticket: string) =>
+    api.get<ApiResponse<PengaduanItem>>(`/pengaduan/ticket/${encodeURIComponent(ticket)}`),
   listAdmin: () => api.get<ApiResponse<PengaduanItem[]>>('/pengaduan'),
   updateStatus: (
     id: string,
@@ -277,4 +286,33 @@ export const pengaduanApi = {
       response?: string;
     }
   ) => api.patch<ApiResponse<PengaduanItem>>(`/pengaduan/${id}/status`, payload),
+};
+
+export const uploadApi = {
+  image: (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    return api.post<ApiResponse<{ url: string; filename: string }>>('/uploads', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};
+
+export type AdminUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: 'ADMIN' | 'SUPER_ADMIN';
+  isActive: boolean;
+  createdAt: string;
+};
+
+export const authUsersApi = {
+  list: () => api.get<ApiResponse<AdminUser[]>>('/auth/users'),
+  register: (payload: {
+    email: string;
+    password: string;
+    name: string;
+    role?: 'ADMIN' | 'SUPER_ADMIN';
+  }) => api.post<ApiResponse<AdminUser>>('/auth/register', payload),
 };

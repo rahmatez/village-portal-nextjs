@@ -48,11 +48,15 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/desa_mindaka_test?schema=public
         run: npx prisma migrate deploy
 
+      - name: Test
+        run: npm test
+
       - name: Build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/desa_mindaka_test?schema=public
           JWT_SECRET: ci-jwt-secret-minimum-32-characters-long
           CORS_ORIGIN: http://localhost:3000
+          API_PUBLIC_URL: http://localhost:4000
         run: npm run build
 
   frontend:

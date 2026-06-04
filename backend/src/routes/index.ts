@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './auth.routes';
-import beritaRoutes from './berita.routes';
 import produkRoutes from './produk.routes';
+import uploadRoutes from './upload.routes';
 import pengaduanRoutes from './pengaduan.routes';
 import statistikRoutes from './statistik.routes';
 import profilSosialRoutes from './profil-sosial.routes';
@@ -14,11 +14,15 @@ import postsRoutes from './posts.routes';
 const router = Router();
 
 router.get('/health', (_req, res) => {
-  res.json({ success: true, message: 'API Desa Mindaka berjalan' });
+  res.json({
+    success: true,
+    message: 'API Desa Mindaka berjalan',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 router.use('/auth', authRoutes);
-router.use('/berita', beritaRoutes);
+router.use('/uploads', uploadRoutes);
 router.use('/produk', produkRoutes);
 router.use('/pengaduan', pengaduanRoutes);
 router.use('/statistik', statistikRoutes);

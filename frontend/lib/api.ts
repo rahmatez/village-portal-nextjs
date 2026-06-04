@@ -21,6 +21,7 @@ export interface DataStatistik {
   ppidEmail: string | null;
   visi: string | null;
   misi: string[];
+  sejarahDesa: string | null;
 }
 
 export interface ProdukUMKM {
@@ -35,6 +36,8 @@ export interface ProdukUMKM {
 
 export const statistikApi = {
   get: () => api.get<ApiResponse<DataStatistik>>('/statistik'),
+  update: (payload: Partial<DataStatistik>) =>
+    api.patch<ApiResponse<DataStatistik>>('/statistik', payload),
 };
 
 export const produkApi = {

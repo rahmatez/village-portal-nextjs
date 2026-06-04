@@ -6,14 +6,8 @@ import { ShoppingBag, Store, ArrowRight, Package } from 'lucide-react';
 import { produkApi, formatRupiah } from '@/lib/api';
 import { statistikApi } from '@/lib/api';
 
-const fallbackProduk = [
-  { id: '1', name: 'Keripik Singkong Pedas', price: 15000, description: 'Camilan tradisional' },
-  { id: '2', name: 'Madu Hutan Mindaka', price: 75000, description: 'Madu murni lokal' },
-  { id: '3', name: 'Anyaman Eceng Gondok', price: 45000, description: 'Kerajinan tangan' },
-];
-
 export function KatalogPreview() {
-  const { data: produkRes } = useQuery({
+  const { data: produkRes, isLoading } = useQuery({
     queryKey: ['produk', 'preview'],
     queryFn: async () => {
       const res = await produkApi.list(3);
@@ -29,8 +23,8 @@ export function KatalogPreview() {
     },
   });
 
-  const produk = produkRes?.length ? produkRes : fallbackProduk;
-  const jumlahToko = statRes?.jumlahTokoUMKM ?? 24;
+  const produk = produkRes ?? [];
+  const jumlahToko = statRes?.jumlahTokoUMKM ?? 0;
 
   return (
     <section className="py-16">
@@ -47,6 +41,14 @@ export function KatalogPreview() {
         </div>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {isLoading && (
+            <p className="col-span-full text-center text-slate-500">Memuat produk...</p>
+          )}
+          {!isLoading && produk.length === 0 && (
+            <p className="col-span-full text-center text-slate-500">
+              Belum ada produk UMKM. Kelola di dashboard admin.
+            </p>
+          )}
           {produk.map((item) => (
             <article key={item.id} className="card overflow-hidden p-0">
               <div className="flex h-40 items-center justify-center bg-gradient-to-br from-primary-100 to-primary-200">

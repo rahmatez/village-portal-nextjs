@@ -14,6 +14,7 @@ export const updateStatistikSchema = z.object({
   ppidEmail: z.string().email().optional().or(z.literal('')),
   visi: z.string().optional(),
   misi: z.array(z.string()).optional(),
+  sejarahDesa: z.string().optional(),
 });
 
 export type UpdateStatistikInput = z.infer<typeof updateStatistikSchema>;

@@ -14,6 +14,7 @@ import { AdminFormActions } from '@/components/admin/ui/AdminFormActions';
 import { AdminLoadingRow } from '@/components/admin/ui/AdminLoadingRow';
 import { AdminErrorAlert } from '@/components/admin/ui/AdminErrorAlert';
 import { useConfirmSave } from '@/components/admin/ui/useConfirmSave';
+import { ImageUploadField } from '@/components/admin/ui/ImageUploadField';
 
 type PostForm = {
   judul: string;
@@ -223,11 +224,15 @@ export function PostsManager() {
       )}
 
       {showForm && (
-        <AdminModal title={title}>
+        <AdminModal title={title} onClose={closeForm}>
           <form onSubmit={onSubmit} className="mt-4 space-y-3">
               <input className="admin-input" placeholder="Judul" value={form.judul} onChange={(e) => setForm((s) => ({ ...s, judul: e.target.value }))} required />
               <input className="admin-input" placeholder="Slug" value={form.slug} onChange={(e) => setForm((s) => ({ ...s, slug: e.target.value }))} required />
-              <input className="admin-input" placeholder="URL Foto Sampul (opsional)" value={form.fotoSampul} onChange={(e) => setForm((s) => ({ ...s, fotoSampul: e.target.value }))} />
+              <ImageUploadField
+                label="Foto sampul"
+                value={form.fotoSampul}
+                onChange={(url) => setForm((s) => ({ ...s, fotoSampul: url }))}
+              />
               <textarea className="admin-input min-h-[100px]" placeholder="Excerpt (opsional)" value={form.excerpt} onChange={(e) => setForm((s) => ({ ...s, excerpt: e.target.value }))} />
               <textarea className="admin-input min-h-[180px]" placeholder="Konten" value={form.konten} onChange={(e) => setForm((s) => ({ ...s, konten: e.target.value }))} required />
               <div className="grid grid-cols-2 gap-3">

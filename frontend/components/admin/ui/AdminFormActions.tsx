@@ -13,15 +13,11 @@ export function AdminFormActions({
   submitting = false,
   submitLabel = 'Simpan',
   submittingLabel = 'Menyimpan...',
-  className = 'pt-2',
+  className = 'pt-4',
 }: AdminFormActionsProps) {
   return (
-    <div className={`flex justify-end gap-2 ${className}`}>
-      <button
-        type="button"
-        onClick={onCancel}
-        className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
-      >
+    <div className={`flex flex-col-reverse gap-2 border-t border-slate-100 sm:flex-row sm:justify-end ${className}`}>
+      <button type="button" onClick={onCancel} className="admin-btn-ghost">
         Batal
       </button>
       <button type="submit" disabled={submitting} className="btn-admin">

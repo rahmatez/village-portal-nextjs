@@ -8,5 +8,6 @@ dist/
 coverage/
 .turbo/
 *.tsbuildinfo
+backend/uploads/
 lanjutan.md
 promt.md

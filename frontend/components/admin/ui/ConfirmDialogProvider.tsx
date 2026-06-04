@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import { AlertTriangle } from 'lucide-react';
 
 type ConfirmTone = 'primary' | 'danger';
 
@@ -43,31 +44,41 @@ export function ConfirmDialogProvider({ children }: { children: ReactNode }) {
     <ConfirmContext.Provider value={value}>
       {children}
       {pending ? (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">
-            <h3 className="text-lg font-semibold text-slate-900">
-              {pending.title ?? 'Konfirmasi Aksi'}
-            </h3>
-            <p className="mt-2 text-sm text-slate-600">{pending.message}</p>
-            <div className="mt-5 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => close(false)}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-              >
-                {pending.cancelText ?? 'Batalkan'}
-              </button>
-              <button
-                type="button"
-                onClick={() => close(true)}
-                className={`rounded-lg px-4 py-2 text-sm font-semibold text-white ${
+        <div
+          className="admin-modal-backdrop z-[60]"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) close(false);
+          }}
+        >
+          <div className="admin-modal-panel max-w-md !overflow-visible">
+            <div className="p-6">
+              <div
+                className={`mb-4 inline-flex rounded-2xl p-3 ${
                   pending.tone === 'danger'
-                    ? 'bg-rose-600 hover:bg-rose-700'
-                    : 'bg-[#465fff] hover:bg-[#364ee6]'
+                    ? 'bg-rose-50 text-rose-600'
+                    : 'bg-primary-50 text-primary-600'
                 }`}
               >
-                {pending.confirmText ?? 'Simpan'}
-              </button>
+                <AlertTriangle className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900">
+                {pending.title ?? 'Konfirmasi Aksi'}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">{pending.message}</p>
+              <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <button type="button" onClick={() => close(false)} className="admin-btn-ghost">
+                  {pending.cancelText ?? 'Batalkan'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => close(true)}
+                  className={
+                    pending.tone === 'danger' ? 'admin-btn-danger' : 'btn-admin'
+                  }
+                >
+                  {pending.confirmText ?? 'Ya, lanjutkan'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

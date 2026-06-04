@@ -221,7 +221,7 @@ export function PemerintahanManager() {
       </div>
 
       {showPerangkatForm && (
-        <AdminModal title={editing ? 'Edit Perangkat' : 'Tambah Perangkat'} maxWidthClassName="max-w-xl">
+        <AdminModal title={editing ? 'Edit Perangkat' : 'Tambah Perangkat'} maxWidthClassName="max-w-xl" onClose={closePerangkatForm}>
           <form onSubmit={onSubmitPerangkat} className="mt-4 space-y-3">
               <input className="admin-input" placeholder="Nama" value={perangkatForm.nama} onChange={(e) => setPerangkatForm((s) => ({ ...s, nama: e.target.value }))} required />
               <input className="admin-input" placeholder="Jabatan" value={perangkatForm.jabatan} onChange={(e) => setPerangkatForm((s) => ({ ...s, jabatan: e.target.value }))} required />

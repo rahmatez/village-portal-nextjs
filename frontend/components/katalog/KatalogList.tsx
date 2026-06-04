@@ -1,49 +1,19 @@
 'use client';
 
+import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { Package } from 'lucide-react';
 import { produkApi, formatRupiah } from '@/lib/api';
 
-const fallbackProduk = [
-  {
-    id: '1',
-    name: 'Keripik Singkong Pedas',
-    description: 'Camilan tradisional olahan singkong lokal.',
-    price: 15000,
-    ownerName: 'Ibu Siti',
-    contact: '081234567890',
-    imageUrl: null,
-  },
-  {
-    id: '2',
-    name: 'Madu Hutan Mindaka',
-    description: 'Madu murni dari lebah hutan sekitar desa.',
-    price: 75000,
-    ownerName: 'Pak Budi',
-    contact: '081298765432',
-    imageUrl: null,
-  },
-  {
-    id: '3',
-    name: 'Anyaman Eceng Gondok',
-    description: 'Tas dan keranjang anyaman tangan warga.',
-    price: 45000,
-    ownerName: 'Kelompok Wanita Tani',
-    contact: '081276543210',
-    imageUrl: null,
-  },
-];
-
 export function KatalogList() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['produk', 'all'],
     queryFn: async () => {
       const res = await produkApi.list();
       return res.data.data;
     },
+    retry: false,
   });
-
-  const produk = data?.length ? data : fallbackProduk;
 
   if (isLoading) {
     return (
@@ -51,12 +21,34 @@ export function KatalogList() {
     );
   }
 
+  if (isError) {
+    return (
+      <div className="card py-12 text-center text-slate-600">
+        Gagal memuat katalog. Pastikan server API berjalan.
+      </div>
+    );
+  }
+
+  if (!data?.length) {
+    return (
+      <div className="card py-12 text-center text-slate-500">
+        Belum ada produk UMKM yang dipublikasikan.
+      </div>
+    );
+  }
+
+  const produk = data;
+
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {produk.map((item) => (
         <article key={item.id} className="card overflow-hidden p-0">
-          <div className="flex h-44 items-center justify-center bg-gradient-to-br from-primary-100 to-primary-200">
-            <Package className="h-14 w-14 text-primary-400" />
+          <div className="relative flex h-44 items-center justify-center bg-gradient-to-br from-primary-100 to-primary-200">
+            {item.imageUrl ? (
+              <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
+            ) : (
+              <Package className="h-14 w-14 text-primary-400" />
+            )}
           </div>
           <div className="p-5">
             <h3 className="font-semibold text-primary-800">{item.name}</h3>

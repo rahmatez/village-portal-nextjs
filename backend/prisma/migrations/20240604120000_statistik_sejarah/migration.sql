@@ -1,0 +1,1 @@
+ALTER TABLE "DataStatistik" ADD COLUMN IF NOT EXISTS "sejarahDesa" TEXT;

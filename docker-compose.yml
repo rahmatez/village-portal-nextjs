@@ -39,6 +39,7 @@ services:
     volumes:
       - ./backend:/app
       - /app/node_modules
+      - uploads_data:/app/uploads
     command: sh -c "npx prisma migrate deploy && npx prisma db seed && npm run dev"
 
   # Uncomment untuk menjalankan frontend di Docker
@@ -56,3 +57,4 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:

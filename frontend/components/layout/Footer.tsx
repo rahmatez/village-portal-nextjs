@@ -16,6 +16,7 @@ const layanan = [
   { href: '/profil/sejarah', label: 'Sejarah' },
   { href: '/galeri', label: 'Galeri' },
   { href: '/katalog', label: 'Katalog UMKM' },
+  { href: '/pengaduan', label: 'Pengaduan Warga' },
 ];
 
 export function Footer() {

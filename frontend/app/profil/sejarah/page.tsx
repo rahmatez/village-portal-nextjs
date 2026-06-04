@@ -2,14 +2,17 @@ import type { Metadata } from 'next';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { DESA_INFO } from '@/lib/constants';
 import { SEJARAH_DESA } from '@/lib/content';
+import { fetchStatistik } from '@/lib/fetch-statistik';
 
 export const metadata: Metadata = {
   title: 'Sejarah Desa',
   description: `Sejarah dan perkembangan ${DESA_INFO.name}.`,
 };
 
-export default function SejarahPage() {
-  const paragraphs = SEJARAH_DESA.split('\n\n');
+export default async function SejarahPage() {
+  const statistik = await fetchStatistik();
+  const raw = statistik?.sejarahDesa?.trim() || SEJARAH_DESA;
+  const paragraphs = raw.split(/\n\s*\n/).filter(Boolean);
 
   return (
     <>

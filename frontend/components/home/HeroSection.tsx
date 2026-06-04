@@ -54,12 +54,12 @@ export function HeroSection() {
               Profil Desa
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-            <a
-              href={`mailto:${DESA_INFO.pengaduanEmail}?subject=Pengaduan%20Warga`}
+            <Link
+              href="/pengaduan"
               className="btn-outline border-white text-white hover:bg-white/10"
             >
               Ajukan Pengaduan
-            </a>
+            </Link>
           </div>
         </div>
 

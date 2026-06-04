@@ -9,7 +9,7 @@ type AdminTableProps = {
 
 export function AdminTable({ children, minWidthClassName = 'min-w-[760px]' }: AdminTableProps) {
   return (
-    <div className="admin-table-wrap">
+    <div className="admin-table-wrap overflow-x-auto">
       <table className={`admin-table ${minWidthClassName}`}>{children}</table>
     </div>
   );

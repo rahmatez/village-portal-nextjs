@@ -34,6 +34,13 @@ async function main() {
         ppidEmail: 'ppid@desamindaka.go.id',
         visi:
           'Terwujudnya masyarakat Desa Mindaka yang sejahtera, mandiri, dan berkeadilan melalui pembangunan berkelanjutan.',
+        sejarahDesa: `Asal-usul Desa Mindaka bermula dari perkampungan nelayan dan petani yang bermukim di sepanjang aliran Sungai Mindaka pada abad ke-19. Nama "Mindaka" dipercaya berasal dari kata dalam bahasa Jawa kuno yang berarti "sumber kehidupan", mengingat peran sungai sebagai sumber air dan penghidupan masyarakat.
+
+Pada masa kolonial, wilayah ini menjadi bagian dari kecamatan induk dan mulai terorganisasi dalam sistem pemerintahan desa. Setelah kemerdekaan, Desa Mindaka resmi ditetapkan sebagai desa pada tahun 1958 melalui Peraturan Daerah setempat.
+
+Periode 1980–2000 ditandai pembangunan infrastruktur jalan desa, irigasi pertanian, dan pendirian sekolah dasar. Memasuki era reformasi, desa ini menguatkan tata kelola pemerintahan desa, transparansi APB Desa, dan pemberdayaan ekonomi kreatif melalui UMKM.
+
+Hingga kini, Desa Mindaka terus bertransformasi menuju desa maju dengan indeks desa membangun yang meningkat setiap tahun, tanpa melupakan nilai-nilai budaya dan kearifan lokal yang diwariskan generasi ke generasi.`,
         misi: [
           'Meningkatkan kualitas pelayanan publik yang transparan dan akuntabel.',
           'Mengembangkan potensi ekonomi lokal berbasis UMKM dan pertanian.',

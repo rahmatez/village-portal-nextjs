@@ -19,4 +19,18 @@ export const userRepository = {
       select: { id: true, email: true, name: true, role: true, createdAt: true },
     });
   },
+
+  findMany() {
+    return prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  },
 };

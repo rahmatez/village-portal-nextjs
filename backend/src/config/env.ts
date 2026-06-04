@@ -14,6 +14,10 @@ const envSchema = z.object({
     .string()
     .transform((v) => v === 'true')
     .default('false'),
+  API_PUBLIC_URL: z
+    .string()
+    .optional()
+    .transform((v) => (v && v.trim() !== '' ? v.trim() : undefined)),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -23,4 +27,11 @@ if (!parsed.success) {
   process.exit(1);
 }
 
-export const env = parsed.data;
+const data = parsed.data;
+
+export const env = {
+  ...data,
+  API_PUBLIC_URL:
+    data.API_PUBLIC_URL ??
+    `http://localhost:${data.PORT}`,
+};

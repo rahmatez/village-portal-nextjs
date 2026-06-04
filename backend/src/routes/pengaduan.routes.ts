@@ -6,10 +6,11 @@ import {
   createPengaduanSchema,
   updatePengaduanStatusSchema,
 } from '../validators/pengaduan.validator';
+import { pengaduanLimiter } from '../middlewares/rateLimit.middleware';
 
 const router = Router();
 
-router.post('/', validate(createPengaduanSchema), pengaduanController.create);
+router.post('/', pengaduanLimiter, validate(createPengaduanSchema), pengaduanController.create);
 router.get('/ticket/:ticket', pengaduanController.getByTicket);
 router.get(
   '/',

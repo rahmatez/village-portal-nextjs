@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Clock, Mail } from 'lucide-react';
 import { DESA_INFO } from '@/lib/constants';
 
@@ -13,13 +14,13 @@ export function TopBar() {
             <Clock className="h-3.5 w-3.5" aria-hidden />
             {DESA_INFO.jamLayanan}
           </span>
-          <a
-            href={`mailto:${DESA_INFO.pengaduanEmail}?subject=Pengaduan%20Cepat%20Desa%20Mindaka`}
+          <Link
+            href="/pengaduan"
             className="flex items-center gap-1.5 rounded bg-accent-gold px-3 py-1 font-semibold text-primary-900 transition hover:bg-accent-gold-dark"
           >
             <Mail className="h-3.5 w-3.5" aria-hidden />
             Pengaduan Cepat
-          </a>
+          </Link>
         </div>
       </div>
     </div>

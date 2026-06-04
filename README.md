@@ -160,7 +160,32 @@ npm run lint
     npm --prefix frontend run build
     ```
 
+## Fitur Baru (Portal Lengkap)
+
+- **Pengaduan warga**: `/pengaduan` (form) dan `/pengaduan/lacak` (lacak tiket).
+- **Upload gambar admin**: unggah foto untuk berita, galeri, dan produk (`POST /api/uploads`).
+- **Admin data beranda**: `/admin/statistik` (statistik, IDM, visi-misi, PPID, sejarah).
+- **Admin users** (SUPER_ADMIN): `/admin/users`.
+- **SEO**: metadata & Open Graph per artikel, `robots.txt`, `sitemap.xml`.
+- **Keamanan**: rate limiting login & pengaduan.
+
+## Deploy Produksi
+
+### Backend (Railway / VPS)
+
+1. Set environment: `DATABASE_URL`, `JWT_SECRET` (≥32 karakter), `CORS_ORIGIN` (URL frontend), `COOKIE_SECURE=true`, `API_PUBLIC_URL` (URL publik API, mis. `https://api.desamindaka.go.id`).
+2. Jalankan `npx prisma migrate deploy` dan `npx prisma db seed` (sekali).
+3. Pastikan folder `uploads/` persisten (volume) agar gambar tidak hilang saat redeploy.
+4. Health check: `GET /api/health`.
+
+### Frontend (Vercel)
+
+1. Set `NEXT_PUBLIC_API_URL` ke URL API produksi (dengan `/api`).
+2. Set `NEXT_PUBLIC_SITE_URL` ke domain frontend (untuk sitemap).
+3. Build command: `npm run build` di folder `frontend`.
+
 ## Catatan
 
 - Proyek ini menggunakan cookie auth (`withCredentials: true`) di frontend.
 - Pastikan `CORS_ORIGIN` backend sesuai origin frontend saat development.
+- Modul berita publik memakai **`/api/posts`** (model `Post`). API `/api/berita` lama tidak lagi dipasang di router.

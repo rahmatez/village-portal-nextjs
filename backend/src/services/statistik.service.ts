@@ -16,6 +16,7 @@ const DEFAULT_STATISTIK = {
   ppidEmail: 'ppid@desamindaka.go.id',
   visi:
     'Terwujudnya masyarakat Desa Mindaka yang sejahtera, mandiri, dan berkeadilan melalui pembangunan berkelanjutan.',
+  sejarahDesa: null as string | null,
   misi: [
     'Meningkatkan kualitas pelayanan publik yang transparan dan akuntabel.',
     'Mengembangkan potensi ekonomi lokal berbasis UMKM dan pertanian.',
